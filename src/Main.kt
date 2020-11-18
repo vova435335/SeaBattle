@@ -1,20 +1,21 @@
-import field.FieldView
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
+import screens.AlienScreen
+import screens.OwnScreen
 
 class Main : Application() {
 
     private lateinit var root: AnchorPane
-    private val playerFieldView = FieldView()
-    private val opponentFieldView = FieldView()
+    private val ownScreen = OwnScreen()
+    private val alienScreen = AlienScreen( )
 
     override fun start(primaryStage: Stage) {
         initialize(primaryStage)
 
-        playerFieldView.render(root, 50, 50)
-        opponentFieldView.render(root, 550, 50)
+        root.children.add(alienScreen)
+        root.children.add(ownScreen)
     }
 
     private fun initialize(primaryStage: Stage) {

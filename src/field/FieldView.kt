@@ -12,7 +12,7 @@ import field.field_items.WoundShip
 import util.FieldUtil
 import util.FieldUtil.positionToCoordinationMiddle
 
-class FieldView {
+class FieldView(var state: FieldState) {
 
     private val presenter = FieldPresenter(this)
     private lateinit var canvas: AnchorPane
@@ -25,8 +25,22 @@ class FieldView {
         this.y = y
         this.canvas = canvas
 
-        drawFieldGreed()
         presenter.start()
+        drawFieldGreed()
+    }
+
+    fun onClick(x: Int, y: Int) {
+        when (state) {
+            FieldState.CONSTRUCTOR -> {
+                presenter.constructor(FieldUtil.coordinationToPosition(x - this.x, y - this.y))
+            }
+            FieldState.BATTLE -> {
+                presenter.shot(FieldUtil.coordinationToPosition(x - this.x, y - this.y))
+            }
+            FieldState.LOCK -> {
+                //Do nothing
+            }
+        }
     }
 
     fun drawField(field: Field) {
@@ -39,6 +53,8 @@ class FieldView {
             }
         }
     }
+
+    fun getShips() = presenter.getItems()
 
     private fun drawMiss(position: Position) {
         val rectangle = Rectangle(
