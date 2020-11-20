@@ -1,3 +1,4 @@
+import game.GameView
 import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.layout.AnchorPane
@@ -8,14 +9,16 @@ import screens.OwnScreen
 class Main : Application() {
 
     private lateinit var root: AnchorPane
-    private val ownScreen = OwnScreen()
-    private val alienScreen = AlienScreen( )
+    private val gameScreen = GameView()
+//    private val ownScreen = OwnScreen()
+//    private val alienScreen = AlienScreen()
 
     override fun start(primaryStage: Stage) {
         initialize(primaryStage)
 
-        root.children.add(alienScreen)
-        root.children.add(ownScreen)
+        gameScreen.render(root)
+//        root.children.add(alienScreen)
+//        root.children.add(ownScreen)
     }
 
     private fun initialize(primaryStage: Stage) {

@@ -14,16 +14,13 @@ import util.FieldUtil.positionToCoordinationMiddle
 
 class FieldView(var state: FieldState) {
 
+    var canvas = AnchorPane()
     private val presenter = FieldPresenter(this)
-    private lateinit var canvas: AnchorPane
 
-    private var x = 0
-    private var y = 0
+    fun render(x: Int, y: Int) {
 
-    fun render(canvas: AnchorPane, x: Int, y: Int) {
-        this.x = x
-        this.y = y
-        this.canvas = canvas
+        canvas.layoutX = x.toDouble()
+        canvas.layoutY = y.toDouble()
 
         presenter.start()
         drawFieldGreed()
@@ -32,10 +29,10 @@ class FieldView(var state: FieldState) {
     fun onClick(x: Int, y: Int) {
         when (state) {
             FieldState.CONSTRUCTOR -> {
-                presenter.constructor(FieldUtil.coordinationToPosition(x - this.x, y - this.y))
+                presenter.constructor(FieldUtil.coordinationToPosition(x, y))
             }
             FieldState.BATTLE -> {
-                presenter.shot(FieldUtil.coordinationToPosition(x - this.x, y - this.y))
+                presenter.shot(FieldUtil.coordinationToPosition(x, y))
             }
             FieldState.LOCK -> {
                 //Do nothing
@@ -46,10 +43,22 @@ class FieldView(var state: FieldState) {
     fun drawField(field: Field) {
         for ((key, value) in field.items) {
             when (value) {
-                is Ship -> drawShip(key)
-                is WoundShip -> drawWoundShip(key)
-                is Miss -> drawMiss(key)
-                is Water -> drawWater(key)
+                is Ship -> {
+                    drawShip(key)
+                    drawFieldGreed()
+                }
+                is WoundShip -> {
+                    drawWoundShip(key)
+                    drawFieldGreed()
+                }
+                is Miss -> {
+                    drawMiss(key)
+                    drawFieldGreed()
+                }
+                is Water -> {
+                    drawWater(key)
+                    drawFieldGreed()
+                }
             }
         }
     }
@@ -58,8 +67,8 @@ class FieldView(var state: FieldState) {
 
     private fun drawMiss(position: Position) {
         val rectangle = Rectangle(
-            (positionToCoordinationMiddle(position.col) - 4).toDouble() + x,
-            (positionToCoordinationMiddle(position.row) - 4).toDouble() + y,
+            (positionToCoordinationMiddle(position.col) - 4).toDouble(),
+            (positionToCoordinationMiddle(position.row) - 4).toDouble(),
             8.0,
             8.0
         )
@@ -68,10 +77,10 @@ class FieldView(var state: FieldState) {
 
     private fun drawShip(position: Position) {
         val rectangle = Rectangle(
-            (FieldUtil.positionToCoordination(position.col) + 1).toDouble() + x,
-            (FieldUtil.positionToCoordination(position.row) + 1).toDouble() + y,
-            (FieldUtil.ITEM_SIZE - 1).toDouble(),
-            (FieldUtil.ITEM_SIZE - 1).toDouble()
+            (FieldUtil.positionToCoordination(position.col) + 2).toDouble(),
+            (FieldUtil.positionToCoordination(position.row) + 2).toDouble(),
+            (FieldUtil.ITEM_SIZE - 2).toDouble(),
+            (FieldUtil.ITEM_SIZE - 2).toDouble()
         )
         rectangle.fill = Color.GREEN
         canvas.children.add(rectangle)
@@ -79,10 +88,10 @@ class FieldView(var state: FieldState) {
 
     private fun drawWoundShip(position: Position) {
         val rectangle = Rectangle(
-            (FieldUtil.positionToCoordination(position.col) + 1).toDouble() + x,
-            (FieldUtil.positionToCoordination(position.row) + 1).toDouble() + y,
-            (FieldUtil.ITEM_SIZE - 1).toDouble(),
-            (FieldUtil.ITEM_SIZE - 1).toDouble()
+            (FieldUtil.positionToCoordination(position.col) + 2).toDouble(),
+            (FieldUtil.positionToCoordination(position.row) + 2).toDouble(),
+            (FieldUtil.ITEM_SIZE - 2).toDouble(),
+            (FieldUtil.ITEM_SIZE - 2).toDouble()
         )
         rectangle.fill = Color.RED
         canvas.children.add(rectangle)
@@ -90,10 +99,10 @@ class FieldView(var state: FieldState) {
 
     private fun drawWater(position: Position) {
         val rectangle = Rectangle(
-            (FieldUtil.positionToCoordination(position.col) + 1).toDouble() + x,
-            (FieldUtil.positionToCoordination(position.row) + 1).toDouble() + y,
-            (FieldUtil.ITEM_SIZE - 1).toDouble(),
-            (FieldUtil.ITEM_SIZE - 1).toDouble()
+            (FieldUtil.positionToCoordination(position.col) + 2).toDouble(),
+            (FieldUtil.positionToCoordination(position.row) + 2).toDouble(),
+            (FieldUtil.ITEM_SIZE - 2).toDouble(),
+            (FieldUtil.ITEM_SIZE - 2).toDouble()
         )
         rectangle.fill = Color.DODGERBLUE
         canvas.children.add(rectangle)
@@ -103,18 +112,18 @@ class FieldView(var state: FieldState) {
         for (lineCounter in 0..FieldUtil.LINE_COUNT) {
             canvas.children.add(
                 Line(
-                    0.0 + x,
-                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble() + y,
-                    (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble() + x,
-                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble() + y
+                    0.0,
+                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
+                    (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble(),
+                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble()
                 )
             )
             canvas.children.add(
                 Line(
-                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble() + x,
-                    0.0 + y,
-                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble() + x,
-                    (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble() + y
+                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
+                    0.0,
+                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
+                    (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble()
                 )
             )
         }

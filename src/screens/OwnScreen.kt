@@ -7,17 +7,22 @@ import javafx.scene.input.MouseEvent
 import javafx.scene.layout.AnchorPane
 import util.FieldUtil
 
-class OwnScreen : AnchorPane() {
+class OwnScreen(
+    var state: FieldState,
+    var xPosition: Int,
+    var yPosition: Int
+) : Screen {
 
-    private val ownFieldView = FieldView(FieldState.CONSTRUCTOR)
+    override val fieldView = FieldView(state)
 
     init {
-        ownFieldView.render(this, 50, 50)
+        fieldView.render(xPosition, yPosition)
 
-        onMousePressed = EventHandler {
-            ownFieldView.onClick(it.x.toInt(), it.y.toInt())
-            if(ownFieldView.getShips() >= FieldUtil.START_SHIPS_COUNT) {
-                ownFieldView.state = FieldState.LOCK
+        fieldView.canvas.onMousePressed = EventHandler {
+            println(it.x)
+            fieldView.onClick(it.x.toInt(), it.y.toInt())
+            if (fieldView.getShips() >= FieldUtil.START_SHIPS_COUNT) {
+                fieldView.state = FieldState.LOCK
             }
         }
     }

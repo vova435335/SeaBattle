@@ -7,7 +7,13 @@ object FieldUtil {
     const val ITEM_INLINE_COUNT = 10
     const val LINE_COUNT = 10
     const val ITEM_SIZE = 40
+
     const val START_SHIPS_COUNT = 20
+
+    const val START_OWN_SCREEN_X = 50
+    const val START_OWN_SCREEN_Y = 50
+    const val START_ALIEN_SCREEN_x = 550
+    const val START_ALIEN_SCREEN_Y = 50
 
     fun positionToCoordinationMiddle(positionValue: Int) =
         (positionValue - 1) * ITEM_SIZE + ITEM_SIZE / 2

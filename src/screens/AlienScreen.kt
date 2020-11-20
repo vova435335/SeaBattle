@@ -3,18 +3,21 @@ package screens
 import field.FieldState
 import field.FieldView
 import javafx.event.EventHandler
-import javafx.scene.input.MouseEvent
-import javafx.scene.layout.AnchorPane
 
-class AlienScreen : AnchorPane() {
+class AlienScreen(
+    var state: FieldState,
+    var xPosition: Int,
+    var yPosition: Int
+) : Screen {
 
-    private val alienFieldView = FieldView(FieldState.LOCK)
+    override val fieldView = FieldView(state)
 
     init {
-        alienFieldView.render(this, 550, 50)
+        fieldView.render(xPosition, yPosition)
 
-        onMousePressed = EventHandler {
-            alienFieldView.onClick(it.x.toInt(), it.y.toInt())
+        fieldView.canvas.onMousePressed = EventHandler {
+            fieldView.onClick(it.x.toInt(), it.y.toInt())
+            println(it.x)
         }
     }
 }
