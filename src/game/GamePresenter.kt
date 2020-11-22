@@ -23,27 +23,29 @@ class GamePresenter(private val view: GameView) {
     }
 
     fun execution(player1: Player, player2: Player) {
-        if (player1.moved && !player1.screen.click) {
-            player1.screen.state = FieldState.BATTLE
-            player2.screen.state = FieldState.LOCK
+        if (player1.screen.click || player2.screen.click) {
+            if (player1.moved && !player1.screen.click) {
+                player1.screen.state = FieldState.BATTLE
+                player2.screen.state = FieldState.LOCK
 
-            nextMove(player1, player2)
-            player2.screen.click = false
-        } else if (player2.moved && !player2.screen.click) {
-            player1.screen.state = FieldState.LOCK
-            player2.screen.state = FieldState.BATTLE
+                nextMove(player1, player2)
+                player2.screen.click = false
+            } else if (player2.moved && !player2.screen.click) {
+                player1.screen.state = FieldState.LOCK
+                player2.screen.state = FieldState.BATTLE
 
-            nextMove(player1, player2)
-            player1.screen.click = false
-        }
+                nextMove(player1, player2)
+                player1.screen.click = false
+            }
 
-        if (player1.screen.fieldView.getShips() == 0 || player2.screen.fieldView.getShips() == 0) {
-            player1.screen.state = FieldState.LOCK
-            player2.screen.state = FieldState.LOCK
-            player1.screen.render()
-            player2.screen.render()
+            if (player1.screen.fieldView.getShips() == 0 || player2.screen.fieldView.getShips() == 0) {
+                player1.screen.state = FieldState.LOCK
+                player2.screen.state = FieldState.LOCK
+                player1.screen.render()
+                player2.screen.render()
 
-            view.moveState = MoveState.END_GAME
+                view.moveState = MoveState.END_GAME
+            }
         }
     }
 

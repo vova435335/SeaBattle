@@ -5,8 +5,7 @@ import javafx.event.EventHandler
 import javafx.scene.control.Button
 import javafx.scene.layout.AnchorPane
 import players.Player
-import game.screens.AlienScreen
-import game.screens.OwnScreen
+import game.screens.Screen
 import util.FieldUtil
 
 class GameView : AnchorPane() {
@@ -25,9 +24,9 @@ class GameView : AnchorPane() {
         this.canvas = canvas
 
         player1 =
-            Player(OwnScreen(FieldState.CONSTRUCTOR, FieldUtil.START_OWN_SCREEN_X, FieldUtil.START_OWN_SCREEN_Y), true)
+            Player(Screen(FieldState.CONSTRUCTOR, FieldUtil.START_OWN_SCREEN_X, FieldUtil.START_OWN_SCREEN_Y), true)
         player2 =
-            Player(AlienScreen(FieldState.WAITING, FieldUtil.START_ALIEN_SCREEN_X, FieldUtil.START_ALIEN_SCREEN_Y), false)
+            Player(Screen(FieldState.WAITING, FieldUtil.START_ALIEN_SCREEN_X, FieldUtil.START_ALIEN_SCREEN_Y), false)
 
         drawButton()
 
@@ -36,6 +35,7 @@ class GameView : AnchorPane() {
         canvas.children.add(nextMove)
 
         onClickButton()
+        onClick()
     }
 
 
@@ -48,16 +48,16 @@ class GameView : AnchorPane() {
 
     private fun onClickButton() {
         nextMove.onAction = EventHandler {
-            when(moveState) {
-                MoveState.STARTING -> {
-                    presenter.starting(player1, player2)
-                }
-                MoveState.EXECUTION -> {
-                    presenter.execution(player1, player2)
-                }
-                MoveState.END_GAME -> {
-                    //Do nothing
-                }
+            if(moveState == MoveState.STARTING) {
+                presenter.starting(player1, player2)
+            }
+        }
+    }
+
+    private fun onClick() {
+        canvas.onMousePressed = EventHandler {
+            if(moveState == MoveState.EXECUTION) {
+                presenter.execution(player1, player2)
             }
         }
     }
