@@ -3,22 +3,17 @@ import javafx.application.Application
 import javafx.scene.Scene
 import javafx.scene.layout.AnchorPane
 import javafx.stage.Stage
-import screens.AlienScreen
-import screens.OwnScreen
 
 class Main : Application() {
 
     private lateinit var root: AnchorPane
     private val gameScreen = GameView()
-//    private val ownScreen = OwnScreen()
-//    private val alienScreen = AlienScreen()
 
     override fun start(primaryStage: Stage) {
         initialize(primaryStage)
 
+        root.style = "-fx-background-color: #ffffff"
         gameScreen.render(root)
-//        root.children.add(alienScreen)
-//        root.children.add(ownScreen)
     }
 
     private fun initialize(primaryStage: Stage) {

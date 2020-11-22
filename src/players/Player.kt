@@ -1,5 +1,5 @@
 package players
 
-import screens.Screen
+import game.screens.Screen
 
-class Player(var screen: Screen, var active: Boolean)
+class Player(var screen: Screen, var moved: Boolean)

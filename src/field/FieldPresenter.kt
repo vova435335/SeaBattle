@@ -6,7 +6,7 @@ import util.FieldUtil
 
 class FieldPresenter(private val view: FieldView) {
 
-    private val model = FieldModel()
+    private var model = FieldModel()
 
     fun start() {
         view.drawField(model.field)
@@ -35,6 +35,9 @@ class FieldPresenter(private val view: FieldView) {
         when (item) {
             is Water -> {
                 model.field.items[position] = Ship()
+            }
+            is Ship -> {
+                model.field.items[position] = Water()
             }
             else -> {
                 //Do nothing

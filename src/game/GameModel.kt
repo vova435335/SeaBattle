@@ -1,8 +1,8 @@
 package game
 
-import screens.AlienScreen
-import screens.OwnScreen
+import field.FieldModel
 
 class GameModel {
 
+    var fieldModel = FieldModel()
 }

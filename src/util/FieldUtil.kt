@@ -12,7 +12,7 @@ object FieldUtil {
 
     const val START_OWN_SCREEN_X = 50
     const val START_OWN_SCREEN_Y = 50
-    const val START_ALIEN_SCREEN_x = 550
+    const val START_ALIEN_SCREEN_X = 550
     const val START_ALIEN_SCREEN_Y = 50
 
     fun positionToCoordinationMiddle(positionValue: Int) =

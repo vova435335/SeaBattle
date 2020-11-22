@@ -14,16 +14,14 @@ import util.FieldUtil.positionToCoordinationMiddle
 
 class FieldView(var state: FieldState) {
 
-    var canvas = AnchorPane()
+    val canvas = AnchorPane()
     private val presenter = FieldPresenter(this)
 
     fun render(x: Int, y: Int) {
-
         canvas.layoutX = x.toDouble()
         canvas.layoutY = y.toDouble()
 
         presenter.start()
-        drawFieldGreed()
     }
 
     fun onClick(x: Int, y: Int) {
@@ -37,6 +35,9 @@ class FieldView(var state: FieldState) {
             FieldState.LOCK -> {
                 //Do nothing
             }
+            FieldState.WAITING -> {
+                //Do nothing
+            }
         }
     }
 
@@ -44,8 +45,13 @@ class FieldView(var state: FieldState) {
         for ((key, value) in field.items) {
             when (value) {
                 is Ship -> {
-                    drawShip(key)
-                    drawFieldGreed()
+                    if(state == FieldState.BATTLE || state == FieldState.WAITING){
+                        drawWater(key)
+                        drawFieldGreed()
+                    } else {
+                        drawShip(key)
+                        drawFieldGreed()
+                    }
                 }
                 is WoundShip -> {
                     drawWoundShip(key)
@@ -57,10 +63,10 @@ class FieldView(var state: FieldState) {
                 }
                 is Water -> {
                     drawWater(key)
-                    drawFieldGreed()
                 }
             }
         }
+        drawFieldGreed()
     }
 
     fun getShips() = presenter.getItems()
@@ -105,27 +111,31 @@ class FieldView(var state: FieldState) {
             (FieldUtil.ITEM_SIZE - 2).toDouble()
         )
         rectangle.fill = Color.DODGERBLUE
+        rectangle.fill = Color.WHITE
         canvas.children.add(rectangle)
     }
 
     private fun drawFieldGreed() {
         for (lineCounter in 0..FieldUtil.LINE_COUNT) {
-            canvas.children.add(
-                Line(
-                    0.0,
-                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
-                    (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble(),
-                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble()
-                )
+            var line = Line(
+                0.0,
+                (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
+                (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble(),
+                (lineCounter * FieldUtil.ITEM_SIZE).toDouble()
             )
-            canvas.children.add(
-                Line(
+            line.stroke = Color.DARKCYAN
+            line.strokeWidth = 1.0
+            canvas.children.add(line)
+
+            line = Line(
                     (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
                     0.0,
                     (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
                     (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble()
-                )
             )
+            line.stroke = Color.DARKCYAN
+            line.strokeWidth = 1.0
+            canvas.children.add(line)
         }
     }
 }
