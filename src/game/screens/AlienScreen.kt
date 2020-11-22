@@ -11,15 +11,21 @@ class AlienScreen(
 ) : Screen {
 
     override val fieldView = FieldView(state)
+    override var click: Boolean = false
 
     init {
         render()
 
         fieldView.canvas.onMousePressed = EventHandler {
-            render()
-
-            fieldView.onClick(it.x.toInt(), it.y.toInt())
+            if (!click && state == FieldState.CONSTRUCTOR) {
+                fieldView.onClick(it.x.toInt(), it.y.toInt())
+            } else if (!click && state == FieldState.BATTLE) {
+                fieldView.onClick(it.x.toInt(), it.y.toInt())
+                click = true
+            }
         }
+
+
     }
 
     override fun render() {

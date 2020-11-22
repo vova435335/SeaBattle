@@ -3,6 +3,6 @@ package game
 enum class MoveState {
 
     STARTING,
-    WAITING,
-    EXECUTION
+    EXECUTION,
+    END_GAME
 }

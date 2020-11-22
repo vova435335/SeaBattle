@@ -55,8 +55,8 @@ class GameView : AnchorPane() {
                 MoveState.EXECUTION -> {
                     presenter.execution(player1, player2)
                 }
-                else -> {
-
+                MoveState.END_GAME -> {
+                    //Do nothing
                 }
             }
         }

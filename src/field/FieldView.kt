@@ -32,10 +32,7 @@ class FieldView(var state: FieldState) {
             FieldState.BATTLE -> {
                 presenter.shot(FieldUtil.coordinationToPosition(x, y))
             }
-            FieldState.LOCK -> {
-                //Do nothing
-            }
-            FieldState.WAITING -> {
+            else -> {
                 //Do nothing
             }
         }
@@ -45,7 +42,7 @@ class FieldView(var state: FieldState) {
         for ((key, value) in field.items) {
             when (value) {
                 is Ship -> {
-                    if(state == FieldState.BATTLE || state == FieldState.WAITING){
+                    if (state == FieldState.BATTLE || state == FieldState.WAITING) {
                         drawWater(key)
                         drawFieldGreed()
                     } else {
@@ -128,10 +125,10 @@ class FieldView(var state: FieldState) {
             canvas.children.add(line)
 
             line = Line(
-                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
-                    0.0,
-                    (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
-                    (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble()
+                (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
+                0.0,
+                (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
+                (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble()
             )
             line.stroke = Color.DARKCYAN
             line.strokeWidth = 1.0
