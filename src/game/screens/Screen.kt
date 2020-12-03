@@ -3,12 +3,16 @@ package game.screens
 import field.FieldState
 import field.FieldView
 import javafx.event.EventHandler
+import javax.swing.text.Position
 
-class Screen (
+class Screen(
     var state: FieldState,
     var xPosition: Int,
     var yPosition: Int
-){
+) {
+
+    lateinit var startPosition: Position
+    lateinit var endPosition: Position
 
     val fieldView = FieldView(state)
     var click: Boolean = false
@@ -24,9 +28,8 @@ class Screen (
                 click = true
             }
         }
-
-
     }
+
 
     fun render() {
         fieldView.state = state

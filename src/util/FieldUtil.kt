@@ -15,6 +15,11 @@ object FieldUtil {
     const val START_ALIEN_SCREEN_X = 550
     const val START_ALIEN_SCREEN_Y = 50
 
+    const val LEFT_BORDER = 0
+    const val RIGHT_BORDER = 11
+    const val TOP_BORDER = 0
+    const val BOTTOM_BORDER = 11
+
     fun positionToCoordinationMiddle(positionValue: Int) =
         (positionValue - 1) * ITEM_SIZE + ITEM_SIZE / 2
 

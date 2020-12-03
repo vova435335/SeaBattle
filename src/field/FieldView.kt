@@ -5,11 +5,11 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Line
 import javafx.scene.shape.Rectangle
 import Position
-import field.field_items.Miss
-import field.field_items.Ship
-import field.field_items.Water
-import field.field_items.WoundShip
+import field.field_items.*
+import javafx.scene.shape.Circle
 import util.FieldUtil
+import util.FieldUtil.ITEM_SIZE
+import util.FieldUtil.positionToCoordination
 import util.FieldUtil.positionToCoordinationMiddle
 
 class FieldView(var state: FieldState) {
@@ -39,27 +39,31 @@ class FieldView(var state: FieldState) {
     }
 
     fun drawField(field: Field) {
+        canvas.children.clear()
         for ((key, value) in field.items) {
             when (value) {
                 is Ship -> {
                     if (state == FieldState.BATTLE || state == FieldState.WAITING) {
                         drawWater(key)
-                        drawFieldGreed()
                     } else {
                         drawShip(key)
-                        drawFieldGreed()
+
                     }
                 }
                 is WoundShip -> {
                     drawWoundShip(key)
-                    drawFieldGreed()
+                }
+                is KilledShip -> {
+                    drawKilledShip(key)
                 }
                 is Miss -> {
                     drawMiss(key)
-                    drawFieldGreed()
                 }
                 is Water -> {
                     drawWater(key)
+                }
+                is AllowedField -> {
+                    drawAllowedField(key)
                 }
             }
         }
@@ -69,35 +73,29 @@ class FieldView(var state: FieldState) {
     fun getShips() = presenter.getItems()
 
     private fun drawMiss(position: Position) {
-        val rectangle = Rectangle(
-            (positionToCoordinationMiddle(position.col) - 4).toDouble(),
-            (positionToCoordinationMiddle(position.row) - 4).toDouble(),
-            8.0,
-            8.0
+        val oval = Circle(
+            (positionToCoordinationMiddle(position.col)).toDouble(),
+            (positionToCoordinationMiddle(position.row)).toDouble(),
+            4.0,
+            Color.DARKCYAN
         )
-        canvas.children.add(rectangle)
+        canvas.children.add(oval)
     }
 
     private fun drawShip(position: Position) {
-        val rectangle = Rectangle(
-            (FieldUtil.positionToCoordination(position.col) + 2).toDouble(),
-            (FieldUtil.positionToCoordination(position.row) + 2).toDouble(),
-            (FieldUtil.ITEM_SIZE - 2).toDouble(),
-            (FieldUtil.ITEM_SIZE - 2).toDouble()
-        )
-        rectangle.fill = Color.GREEN
-        canvas.children.add(rectangle)
+        drawElement(Color.GREEN, position)
     }
 
     private fun drawWoundShip(position: Position) {
-        val rectangle = Rectangle(
-            (FieldUtil.positionToCoordination(position.col) + 2).toDouble(),
-            (FieldUtil.positionToCoordination(position.row) + 2).toDouble(),
-            (FieldUtil.ITEM_SIZE - 2).toDouble(),
-            (FieldUtil.ITEM_SIZE - 2).toDouble()
-        )
-        rectangle.fill = Color.RED
-        canvas.children.add(rectangle)
+        drawElement(Color.ORANGE, position)
+    }
+
+    private fun drawKilledShip(position: Position) {
+        drawElement(Color.RED, position)
+    }
+
+    private fun drawAllowedField(position: Position) {
+        drawElement(Color.DARKCYAN, position)
     }
 
     private fun drawWater(position: Position) {
@@ -107,7 +105,6 @@ class FieldView(var state: FieldState) {
             (FieldUtil.ITEM_SIZE - 2).toDouble(),
             (FieldUtil.ITEM_SIZE - 2).toDouble()
         )
-        rectangle.fill = Color.DODGERBLUE
         rectangle.fill = Color.WHITE
         canvas.children.add(rectangle)
     }
@@ -121,8 +118,8 @@ class FieldView(var state: FieldState) {
                 (lineCounter * FieldUtil.ITEM_SIZE).toDouble()
             )
             line.stroke = Color.DARKCYAN
-            line.strokeWidth = 1.0
-            canvas.children.add(line)
+            line.strokeWidth = 2.0
+            canvas.children += line
 
             line = Line(
                 (lineCounter * FieldUtil.ITEM_SIZE).toDouble(),
@@ -131,7 +128,41 @@ class FieldView(var state: FieldState) {
                 (FieldUtil.ITEM_SIZE * FieldUtil.ITEM_INLINE_COUNT).toDouble()
             )
             line.stroke = Color.DARKCYAN
+            line.strokeWidth = 2.0
+            canvas.children += line
+        }
+    }
+
+    private fun drawElement(color: Color, position: Position) {
+        var line: Line
+        var i = 0
+
+        while (i < 40) {
+            line = Line(
+                (positionToCoordination(position.col) + 1).toDouble(),
+                (positionToCoordination(position.row) + ITEM_SIZE - i + 1).toDouble(),
+                (positionToCoordination(position.col) + i - 1).toDouble(),
+                (positionToCoordination(position.row) + FieldUtil.ITEM_SIZE - 1).toDouble()
+            )
+            i += 4
+
             line.strokeWidth = 1.0
+            line.stroke = color
+            canvas.children.add(line)
+        }
+
+        i = 0
+        while (i < 40) {
+            line = Line(
+                (positionToCoordination(position.col) + i + 1).toDouble(),
+                (positionToCoordination(position.row) + 1).toDouble(),
+                (positionToCoordination(position.col) + FieldUtil.ITEM_SIZE - 1).toDouble(),
+                (positionToCoordination(position.row) + FieldUtil.ITEM_SIZE - i - 1).toDouble()
+            )
+            i += 4
+
+            line.strokeWidth = 1.0
+            line.stroke = color
             canvas.children.add(line)
         }
     }

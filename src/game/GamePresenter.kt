@@ -7,12 +7,12 @@ import util.FieldUtil
 class GamePresenter(private val view: GameView) {
 
     fun starting(player1: Player, player2: Player) {
-        if (player1.moved && player1.screen.fieldView.getShips() == 3) {
+        if (player1.moved && player1.screen.fieldView.getShips() == 4) {
             player1.screen.state = FieldState.WAITING
             player2.screen.state = FieldState.CONSTRUCTOR
 
             nextMove(player1, player2)
-        } else if (player2.moved && player2.screen.fieldView.getShips() == 3) {
+        } else if (player2.moved && player2.screen.fieldView.getShips() == 4) {
             player1.screen.state = FieldState.LOCK
             player2.screen.state = FieldState.BATTLE
 
